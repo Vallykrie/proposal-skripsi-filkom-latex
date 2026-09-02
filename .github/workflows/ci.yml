@@ -1,0 +1,21 @@
+name: Verify template
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install TeX and PDF tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y latexmk biber texlive-xetex texlive-latex-extra texlive-fonts-recommended fonts-crosextra-carlito poppler-utils
+      - name: Test and build
+        run: make check
+      - uses: actions/upload-artifact@v4
+        with:
+          name: proposal-preview
+          path: build/proposal.pdf
