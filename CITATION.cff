@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "Jika template ini membantu, sitasikan perangkat lunaknya."
+title: "Template Proposal Skripsi FILKOM UB (LaTeX)"
+type: software
+version: 0.1.0
+date-released: 2026-09-02
+authors:
+  - family-names: "Putra"
+    given-names: "Pande Kadek Nathan Prabhaswara Sudiara"
+license: LPPL-1.3c
