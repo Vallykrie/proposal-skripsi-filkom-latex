@@ -1,0 +1,17 @@
+\documentclass[preview]{filkomproposal}
+\input{metadata}
+\usepackage[backend=biber,style=filkom-authoryear]{biblatex}
+\addbibresource{bibliography/references.bib}
+
+\begin{document}
+\makeproposalcover
+\makeproposalfrontmatter
+\input{frontmatter/daftar-istilah}
+\proposalmainmatter
+\input{chapters/bab1-pendahuluan}
+\input{chapters/bab2-landasan-kepustakaan}
+\input{chapters/bab3-metodologi}
+\printbibliography[heading=bibintoc,title={DAFTAR REFERENSI}]
+\appendix
+\input{appendices/lampiran-contoh}
+\end{document}
