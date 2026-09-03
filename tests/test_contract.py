@@ -80,6 +80,10 @@ class PackageContractTests(unittest.TestCase):
             "right=3cm",
             "top=3cm",
             "bottom=3cm",
+            r"\setlength{\parindent}{0.6cm}",
+            r"\fontsize{16pt}{19pt}",
+            r"\includegraphics[width=5cm]",
+            r"\widowpenalty=10000",
             r"\filkomsetup",
         ):
             self.assertIn(token, source)

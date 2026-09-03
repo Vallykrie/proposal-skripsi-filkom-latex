@@ -1,5 +1,6 @@
 import unittest
 from pathlib import Path
+import re
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -55,6 +56,18 @@ class DocumentationTests(unittest.TestCase):
             self.assertIn(token, compatibility)
         for token in ("calibri", "carlito", "biber", "logo", "referensi"):
             self.assertIn(token, troubleshooting)
+
+    def test_relative_markdown_links_resolve(self):
+        missing = []
+        for document in [ROOT / "README.md", *sorted((ROOT / "docs").glob("*.md"))]:
+            text = document.read_text(encoding="utf-8")
+            for target in re.findall(r"\[[^]]+\]\(([^)]+)\)", text):
+                if "://" in target or target.startswith(("#", "mailto:")):
+                    continue
+                path = (document.parent / target.split("#", 1)[0]).resolve()
+                if not path.exists():
+                    missing.append(f"{document.relative_to(ROOT)} -> {target}")
+        self.assertEqual([], missing)
 
 
 if __name__ == "__main__":

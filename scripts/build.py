@@ -1,12 +1,31 @@
 #!/usr/bin/env python3
 from pathlib import Path
 import argparse
-import shutil
 import subprocess
 
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "build"
+GENERATED_NAMES = {
+    "entry.tex",
+    "missfont.log",
+    "proposal.aux",
+    "proposal.bbl",
+    "proposal.bcf",
+    "proposal.blg",
+    "proposal.fdb_latexmk",
+    "proposal.fls",
+    "proposal.loa",
+    "proposal.lof",
+    "proposal.log",
+    "proposal.lot",
+    "proposal.out",
+    "proposal.pdf",
+    "proposal.run.xml",
+    "proposal.synctex.gz",
+    "proposal.toc",
+    "proposal.xdv",
+}
 
 
 def latexmk_command(mode: str, entry: Path) -> list[str]:
@@ -25,24 +44,34 @@ def latexmk_command(mode: str, entry: Path) -> list[str]:
     ]
 
 
-def clean_build_dir(path: Path = BUILD) -> None:
-    path = path.resolve()
-    if path.name != "build":
-        raise ValueError("Direktori pembersihan harus bernama build")
+def _validated_build(path: Path, expected_root: Path) -> Path:
+    if path.is_symlink():
+        raise ValueError("Direktori build tidak boleh berupa symlink")
+    canonical = path.resolve()
+    expected = (expected_root.resolve() / "build").resolve()
+    if canonical != expected:
+        raise ValueError("Direktori pembersihan harus tepat berada di root/build")
+    return canonical
+
+
+def clean_build_dir(path: Path = BUILD, expected_root: Path = ROOT) -> None:
+    path = _validated_build(path, expected_root)
     if path.exists():
         for child in path.iterdir():
-            if child.is_dir() and not child.is_symlink():
-                shutil.rmtree(child)
-            else:
+            if child.name in GENERATED_NAMES and (child.is_file() or child.is_symlink()):
                 child.unlink()
     else:
         path.mkdir(parents=True)
 
 
-def remove_stale_pdf(path: Path = BUILD / "proposal.pdf") -> None:
-    path = path.resolve()
-    if path.parent.name != "build" or path.name != "proposal.pdf":
+def remove_stale_pdf(path: Path = BUILD / "proposal.pdf", expected_root: Path = ROOT) -> None:
+    if path.is_symlink() or path.name != "proposal.pdf":
         raise ValueError("Hanya build/proposal.pdf yang boleh dihapus")
+    try:
+        build = _validated_build(path.parent, expected_root)
+    except ValueError as exc:
+        raise ValueError("Hanya build/proposal.pdf yang boleh dihapus") from exc
+    path = build / "proposal.pdf"
     path.unlink(missing_ok=True)
 
 

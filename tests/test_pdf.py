@@ -3,8 +3,10 @@ import unittest
 from scripts.check_pdf import (
     parse_pdffonts,
     parse_pdfinfo,
+    validate_document_structure,
     validate_fonts,
     validate_required_text,
+    validate_reference_style,
 )
 
 
@@ -36,8 +38,44 @@ ABCDEF+Carlito-Bold                  CID TrueType      Identity-H
 
     def test_preview_accepts_carlito_and_official_requires_calibri(self):
         self.assertEqual(validate_fonts({"Carlito", "Carlito-Bold"}, "preview"), [])
+        self.assertEqual(validate_fonts({"Calibri", "Calibri-Bold"}, "preview"), [])
         self.assertTrue(validate_fonts({"Carlito"}, "official"))
-        self.assertEqual(validate_fonts({"Calibri", "Calibri-Bold"}, "official"), [])
+        self.assertTrue(validate_fonts({"Calibri", "Calibri-Bold"}, "official"))
+        self.assertEqual(
+            validate_fonts({"Calibri", "Calibri-Bold", "Calibri-Italic"}, "official"),
+            [],
+        )
+
+    def test_structure_requires_real_page_heading_order_and_lampiran_label(self):
+        text = "\f".join(
+            [
+                "SAMPUL",
+                "BAB 1 PENDAHULUAN\nisi",
+                "BAB 2 LANDASAN KEPUSTAKAAN\nisi",
+                "BAB 3 METODOLOGI PENELITIAN\nisi",
+                "DAFTAR REFERENSI\nisi",
+                "LAMPIRAN A INSTRUMEN ATAU RINCIAN PENDUKUNG\nisi",
+            ]
+        )
+        self.assertEqual(validate_document_structure(text), [])
+        self.assertTrue(validate_document_structure(text.replace("LAMPIRAN A", "BAB A")))
+
+    def test_forbidden_thesis_frontmatter_is_case_insensitive(self):
+        errors = validate_required_text(
+            "proposal skripsi daftar isi bab 1 pendahuluan "
+            "bab 2 landasan kepustakaan bab 3 metodologi penelitian "
+            "jadwal penelitian daftar referensi "
+            "lampiran a instrumen atau rincian pendukung AbStRaK"
+        )
+        self.assertIn("ABSTRAK", "\n".join(errors))
+
+    def test_reference_style_requires_commas_and_all_three_authors(self):
+        valid = (
+            "(Lamport, 1994) Daftar Referensi Knuth, D.E., 1984. "
+            "Fielding, R.T., Nottingham, M., and Reschke, J., 2022."
+        )
+        self.assertEqual(validate_reference_style(valid), [])
+        self.assertTrue(validate_reference_style(valid.replace("D.E., 1984", "D.E. 1984")))
 
 
 if __name__ == "__main__":

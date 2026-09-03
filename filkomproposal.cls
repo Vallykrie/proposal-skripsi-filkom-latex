@@ -83,8 +83,11 @@
 }
 
 \setstretch{1}
-\setlength{\parindent}{1.27cm}
+\setlength{\parindent}{0.6cm}
 \setlength{\parskip}{0pt}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
 \setlist{nosep}
 \captionsetup{font=normalsize,labelfont=bf,labelsep=space}
 \hypersetup{hidelinks,pdfauthor={\filkom@nama},pdftitle={\filkom@judul}}
@@ -113,7 +116,7 @@
   \begin{titlepage}
     \thispagestyle{empty}
     \centering
-    {\bfseries\fontsize{14pt}{17pt}\selectfont\MakeUppercase{\filkom@judul}\par}
+    {\bfseries\fontsize{16pt}{19pt}\selectfont\MakeUppercase{\filkom@judul}\par}
     \vspace{1.4cm}
     {\bfseries PROPOSAL SKRIPSI\par}
     \vspace{1.1cm}
@@ -122,7 +125,7 @@
     {\MakeUppercase{\filkom@nama}\par}
     {NIM: \filkom@nim\par}
     \vfill
-    \IfFileExists{\filkom@logo}{\includegraphics[width=4.2cm]{\filkom@logo}}{%
+    \IfFileExists{\filkom@logo}{\includegraphics[width=5cm]{\filkom@logo}}{%
       \ClassError{filkomproposal}{Logo tidak ditemukan: \filkom@logo}{Periksa kunci logo pada metadata.tex.}}
     \vfill
     {\MakeUppercase{PROGRAM STUDI \filkom@prodi}\par}
@@ -147,6 +150,9 @@
 }
 \newcommand{\proposalmainmatter}{\clearpage\pagenumbering{arabic}\setcounter{page}{1}}
 \newcommand{\proposalappendix}[1]{%
-  \chapter{#1}\addcontentsline{loa}{chapter}{LAMPIRAN \thechapter\space #1}}
+  \refstepcounter{chapter}%
+  \chapter*{LAMPIRAN \thechapter\space \MakeUppercase{#1}}%
+  \addcontentsline{toc}{chapter}{LAMPIRAN \thechapter\space #1}%
+  \addcontentsline{loa}{chapter}{LAMPIRAN \thechapter\space #1}}
 
 \endinput

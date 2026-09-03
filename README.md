@@ -51,7 +51,7 @@ make preview   # XeLaTeX + Biber; Calibri atau fallback Carlito
 make official  # XeLaTeX + Biber; Calibri wajib
 make test      # semua unit/contract test
 make check     # test, build preview, audit log, dan audit PDF
-make clean     # hanya menghapus direktori build
+make clean     # menghapus hanya artefak LaTeX yang dikenal di build/
 ```
 
 Alternatif preview dengan Tectonic tersedia melalui `tectonic-preview.tex` dan
@@ -59,6 +59,7 @@ memakai BibTeX karena distribusi Tectonic tertentu membundel versi `biblatex`
 yang tidak cocok dengan Biber sistem:
 
 ```sh
+mkdir -p build/tectonic
 tectonic -X compile tectonic-preview.tex --outdir build/tectonic
 ```
 

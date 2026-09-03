@@ -2,6 +2,9 @@
 \RequireBibliographyStyle{ext-authoryear-comp}
 \ExecuteBibliographyOptions{giveninits=true,maxbibnames=99,sorting=nyt,doi=true,url=true}
 \DeclareNameAlias{sortname}{family-given}
+\renewcommand*{\bibinitdelim}{}
+\DeclareDelimFormat[bib]{nameyeardelim}{\addcomma\space}
+\renewbibmacro*{date+extradate}{\printlabeldateextra}
 \DeclareFieldFormat{doi}{\url{https://doi.org/#1}}
 \DefineBibliographyStrings{english}{urlseen={Diakses},andothers={et\addabbrvspace al\adddot}}
 \endinput

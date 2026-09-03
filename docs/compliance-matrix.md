@@ -14,9 +14,11 @@ bukan berarti FILKOM telah mengesahkan proyek ini.
 | Margin kiri 4 cm; atas, kanan, bawah 3 cm | `geometry` pada class | `test_class_contract_has_modes_fonts_and_geometry` | Terimplementasi |
 | Teks utama 12 pt, satu spasi | class `12pt`, `\setstretch{1}` | audit sumber dan PDF | Terimplementasi |
 | Font Calibri | mode `official` menolak font lain | pemeriksaan font PDF dan uji kegagalan prasyarat | Terimplementasi |
+| Indentasi paragraf sekitar 0,6 cm | `\parindent` 0,6 cm | contract test | Terimplementasi |
 | Judul bab 16 pt tebal rata tengah | `titlesec` | audit sumber dan inspeksi visual | Terimplementasi |
 | Subbab 14/14/12 pt tebal | `titlesec` per tingkat | audit sumber | Terimplementasi |
 | Nomor halaman tengah bawah | `fancyhdr` | inspeksi visual seluruh halaman | Terimplementasi |
+| Sampul: judul 16 pt dan logo sekitar 5 cm | `\makeproposalcover` | contract test dan inspeksi visual | Terimplementasi |
 | Sampul bertuliskan `PROPOSAL SKRIPSI` | `\makeproposalcover` | contract test dan ekstraksi teks PDF | Terimplementasi |
 | Sampul proposal tanpa kalimat syarat gelar | class khusus proposal | contract test atas elemen laporan akhir | Terimplementasi |
 | Daftar Isi, Tabel, Gambar, dan Lampiran | `\makeproposalfrontmatter` | ekstraksi teks dan inspeksi PDF | Terimplementasi |
@@ -25,8 +27,8 @@ bukan berarti FILKOM telah mengesahkan proyek ini.
 | Bab 3 Metodologi Penelitian | contoh bab terpisah | contract test dan ekstraksi teks PDF | Terimplementasi |
 | Jadwal Penelitian pada Bab 3 | subbab dan tabel contoh | contract test dan ekstraksi teks PDF | Terimplementasi |
 | Bagian bernama Daftar Referensi | judul `DAFTAR REFERENSI` | contract test dan ekstraksi teks PDF | Terimplementasi |
-| Sitasi author–year/Harvard-Anglia | style `filkom-authoryear` | fixture delapan tipe sumber dan build PDF | Adaptasi terdokumentasi |
-| Lampiran setelah referensi | `\appendix` dan helper lampiran | daftar lampiran serta inspeksi PDF | Terimplementasi |
+| Sitasi author–year/Harvard-Anglia | style `filkom-authoryear` | pola koma, inisial, tiga penulis, delapan tipe sumber, dan build PDF | Adaptasi awal; kasus khusus perlu verifikasi manual |
+| Lampiran setelah referensi, berlabel `LAMPIRAN A` | `\appendix` dan helper lampiran | urutan heading per halaman dan larangan `BAB A` | Terimplementasi |
 
 ## Hal yang tetap harus diperiksa pengguna
 

@@ -7,3 +7,7 @@
   logo UB siap pakai.
 - Menambahkan mode preview/official, build lintas platform, CI, pemeriksa log,
   pemeriksa PDF, dokumentasi kompatibilitas, serta matriks kepatuhan.
+- Menyelaraskan label lampiran, ukuran judul sampul/logo, indentasi paragraf,
+  dan tanda baca sitasi dengan hasil audit dokumen acuan.
+- Memperketat validasi font, struktur halaman, gaya referensi, tautan dokumentasi,
+  serta pembersihan artefak build agar tidak menghapus berkas pengguna.

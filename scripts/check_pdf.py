@@ -18,6 +18,14 @@ REQUIRED_TEXT = (
     "BAB 3 METODOLOGI PENELITIAN",
     "JADWAL PENELITIAN",
     "DAFTAR REFERENSI",
+    "LAMPIRAN A INSTRUMEN ATAU RINCIAN PENDUKUNG",
+)
+FORBIDDEN_TEXT = (
+    "HALAMAN PENGESAHAN",
+    "PERNYATAAN ORISINALITAS",
+    "PRAKATA",
+    "ABSTRAK",
+    "ABSTRACT",
 )
 
 
@@ -55,15 +63,70 @@ def _normalized_text(text: str) -> str:
 
 def validate_required_text(text: str) -> list[str]:
     normalized = _normalized_text(text)
-    return [f"Teks wajib tidak ditemukan: {heading}" for heading in REQUIRED_TEXT if heading not in normalized]
+    errors = [
+        f"Teks wajib tidak ditemukan: {heading}"
+        for heading in REQUIRED_TEXT
+        if heading not in normalized
+    ]
+    errors.extend(
+        f"Bagian skripsi yang tidak semestinya ditemukan: {heading}"
+        for heading in FORBIDDEN_TEXT
+        if heading in normalized
+    )
+    if "BAB A" in normalized:
+        errors.append("Lampiran tidak boleh memakai heading BAB A")
+    return errors
+
+
+def validate_document_structure(text: str) -> list[str]:
+    pages = [_normalized_text(page) for page in text.split("\f") if page.strip()]
+    headings = (
+        "BAB 1 PENDAHULUAN",
+        "BAB 2 LANDASAN KEPUSTAKAAN",
+        "BAB 3 METODOLOGI PENELITIAN",
+        "DAFTAR REFERENSI",
+        "LAMPIRAN A INSTRUMEN ATAU RINCIAN PENDUKUNG",
+    )
+    positions: list[int] = []
+    errors: list[str] = []
+    for heading in headings:
+        matches = [index for index, page in enumerate(pages) if page.startswith(heading)]
+        if not matches:
+            errors.append(f"Heading tidak ditemukan pada awal halaman: {heading}")
+        else:
+            positions.append(matches[0])
+    if len(positions) == len(headings) and positions != sorted(positions):
+        errors.append("Urutan bab, referensi, dan lampiran tidak benar")
+    return errors
+
+
+def validate_reference_style(text: str) -> list[str]:
+    normalized = _normalized_text(text)
+    errors: list[str] = []
+    if "(LAMPORT, 1994)" not in normalized:
+        errors.append("Sitasi author–year harus memakai koma: (Lamport, 1994)")
+    if not re.search(r"KNUTH,\s*D\.E\.,\s*1984", normalized):
+        errors.append("Daftar referensi harus memakai pola Nama, Inisial., Tahun")
+    if not re.search(r"FIELDING,\s*R\.T\.,\s*NOTTINGHAM,\s*M\.,\s*(AND|DAN)\s*RESCHKE", normalized):
+        errors.append("Sitasi/referensi tiga penulis harus menampilkan semua nama")
+    return errors
 
 
 def validate_fonts(fonts: set[str], mode: str) -> list[str]:
     if mode not in {"preview", "official"}:
         raise ValueError(f"Mode tidak dikenal: {mode}")
-    required = "Carlito" if mode == "preview" else "Calibri"
-    if any(font.casefold().startswith(required.casefold()) for font in fonts):
-        return []
+    lowered = {font.casefold() for font in fonts}
+    if mode == "preview":
+        if any(font.startswith(("carlito", "calibri")) for font in lowered):
+            return []
+        required = "Calibri atau Carlito"
+    else:
+        required_faces = {"calibri", "calibri-bold", "calibri-italic"}
+        missing = sorted(required_faces - lowered)
+        has_fallback = any(font.startswith("carlito") for font in lowered)
+        if not missing and not has_fallback:
+            return []
+        required = "Calibri regular, bold, dan italic tanpa Carlito"
     return [f"Mode {mode} wajib menggunakan {required}; font terdeteksi: {', '.join(sorted(fonts))}"]
 
 
@@ -101,7 +164,13 @@ def check_pdf(pdf: Path, mode: str) -> list[str]:
         fonts = parse_pdffonts(run_tool(["pdffonts", str(pdf)]))
     except (RuntimeError, ValueError) as exc:
         return [str(exc)]
-    return validate_page(info) + validate_required_text(text) + validate_fonts(fonts, mode)
+    return (
+        validate_page(info)
+        + validate_required_text(text)
+        + validate_document_structure(text)
+        + validate_reference_style(text)
+        + validate_fonts(fonts, mode)
+    )
 
 
 def main() -> int:
