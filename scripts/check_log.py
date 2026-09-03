@@ -13,6 +13,14 @@ def log_problems(text: str, overfull_limit: float = 2.0) -> list[str]:
         problems.append("referensi silang tidak terdefinisi")
     if "! latex error" in lowered or "emergency stop" in lowered:
         problems.append("error fatal LaTeX")
+    if (
+        "language 'bahasa' not supported" in lowered
+        or "'csquotes' missing" in lowered
+        or "no style for language 'indonesian'" in lowered
+        or "using fallback definition for \\mkbib" in lowered
+        or "bibliography string" in lowered and "untranslated" in lowered
+    ):
+        problems.append("konfigurasi bahasa bibliografi tidak lengkap")
     widths = [float(value) for value in re.findall(r"Overfull \\hbox \(([0-9.]+)pt too wide\)", text)]
     if any(width > overfull_limit for width in widths):
         problems.append(f"overfull box melebihi {overfull_limit:.1f} pt")

@@ -11,8 +11,10 @@
 \ProcessKeyvalOptions*
 \LoadClass[a4paper,12pt,oneside]{report}
 
-\RequirePackage[bahasa]{babel}
+\RequirePackage[indonesian]{babel}
 \RequirePackage{fontspec}
+\RequirePackage{csquotes}
+\DeclareQuoteAlias[american]{english}{indonesian}
 \RequirePackage[left=4cm,right=3cm,top=3cm,bottom=3cm]{geometry}
 \RequirePackage{setspace}
 \RequirePackage{indentfirst}
@@ -107,6 +109,7 @@
 \renewcommand{\footrulewidth}{0pt}
 
 \newcommand{\makeproposalcover}{%
+  \hypersetup{pageanchor=false}%
   \begin{titlepage}
     \thispagestyle{empty}
     \centering
@@ -129,6 +132,7 @@
     {\MakeUppercase{\filkom@kota}\par}
     {\filkom@tahun\par}
   \end{titlepage}
+  \hypersetup{pageanchor=true}%
 }
 
 \newcommand{\makeproposalfrontmatter}{%

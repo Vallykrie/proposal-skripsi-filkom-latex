@@ -12,7 +12,7 @@ jobs:
       - name: Install TeX and PDF tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y latexmk biber texlive-xetex texlive-latex-extra texlive-fonts-recommended fonts-crosextra-carlito poppler-utils
+          sudo apt-get install -y latexmk biber texlive-xetex texlive-latex-extra texlive-bibtex-extra texlive-fonts-recommended fonts-crosextra-carlito poppler-utils
       - name: Test and build
         run: make check
       - uses: actions/upload-artifact@v4

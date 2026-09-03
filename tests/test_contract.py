@@ -84,6 +84,15 @@ class PackageContractTests(unittest.TestCase):
         ):
             self.assertIn(token, source)
 
+    def test_language_stack_uses_supported_babel_and_biblatex_configuration(self):
+        cls = (ROOT / "filkomproposal.cls").read_text(encoding="utf-8")
+        proposal = (ROOT / "proposal.tex").read_text(encoding="utf-8")
+        self.assertIn(r"\RequirePackage[indonesian]{babel}", cls)
+        self.assertIn(r"\RequirePackage{csquotes}", cls)
+        self.assertIn(r"\DeclareQuoteAlias[american]{english}{indonesian}", cls)
+        self.assertIn(r"\DeclareLanguageMapping{indonesian}{english}", proposal)
+        self.assertNotIn(r"\RequirePackage[bahasa]{babel}", cls)
+
     def test_proposal_has_required_sections_without_final_thesis_frontmatter(self):
         files = [
             ROOT / "filkomproposal.cls",

@@ -15,7 +15,7 @@ def latexmk_command(mode: str, entry: Path) -> list[str]:
     return [
         "latexmk",
         "-xelatex",
-        "-use-biber",
+        "-bibtex",
         "-interaction=nonstopmode",
         "-halt-on-error",
         "-file-line-error",
@@ -39,6 +39,13 @@ def clean_build_dir(path: Path = BUILD) -> None:
         path.mkdir(parents=True)
 
 
+def remove_stale_pdf(path: Path = BUILD / "proposal.pdf") -> None:
+    path = path.resolve()
+    if path.parent.name != "build" or path.name != "proposal.pdf":
+        raise ValueError("Hanya build/proposal.pdf yang boleh dihapus")
+    path.unlink(missing_ok=True)
+
+
 def write_entry(mode: str) -> Path:
     BUILD.mkdir(exist_ok=True)
     entry = BUILD / "entry.tex"
@@ -52,6 +59,7 @@ def write_entry(mode: str) -> Path:
 
 def build(mode: str) -> int:
     entry = write_entry(mode)
+    remove_stale_pdf()
     command = latexmk_command(mode, entry)
     try:
         return subprocess.run(command, cwd=ROOT, check=False).returncode

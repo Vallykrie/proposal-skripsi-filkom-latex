@@ -22,8 +22,8 @@ class PdfCheckerTests(unittest.TestCase):
             parse_pdfinfo("Pages: 2\n")
 
     def test_required_text_reports_every_missing_heading(self):
-        errors = validate_required_text("PROPOSAL SKRIPSI\nBAB I PENDAHULUAN")
-        self.assertIn("BAB II LANDASAN KEPUSTAKAAN", "\n".join(errors))
+        errors = validate_required_text("PROPOSAL SKRIPSI\nBAB 1 PENDAHULUAN")
+        self.assertIn("BAB 2 LANDASAN KEPUSTAKAAN", "\n".join(errors))
         self.assertIn("DAFTAR REFERENSI", "\n".join(errors))
 
     def test_parse_pdffonts_extracts_embedded_font_names(self):

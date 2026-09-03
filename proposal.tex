@@ -1,6 +1,16 @@
 \documentclass{filkomproposal}
 \input{metadata}
-\usepackage[backend=biber,style=filkom-authoryear]{biblatex}
+\makeatletter
+\def\input@path{{bibliography/}}
+\makeatother
+\providecommand{\FilkomBibBackend}{biber}
+\usepackage[
+  backend=\FilkomBibBackend,
+  style=filkom-authoryear,
+  language=english,
+  autolang=none
+]{biblatex}
+\DeclareLanguageMapping{indonesian}{english}
 \addbibresource{bibliography/references.bib}
 
 \begin{document}
