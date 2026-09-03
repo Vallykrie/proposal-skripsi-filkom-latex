@@ -143,6 +143,12 @@ class PackageContractTests(unittest.TestCase):
         self.assertTrue((ROOT / "bibliography" / "filkom-authoryear.bbx").is_file())
         self.assertTrue((ROOT / "bibliography" / "filkom-authoryear.cbx").is_file())
 
+    def test_ci_installs_indonesian_babel_language_support(self):
+        workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("texlive-lang-other", workflow)
+
 
 if __name__ == "__main__":
     unittest.main()
