@@ -21,13 +21,14 @@
 \RequirePackage{graphicx}
 \RequirePackage{fancyhdr}
 \RequirePackage{titlesec}
-\RequirePackage{tocloft}
+\RequirePackage[titles]{tocloft}
 \RequirePackage{caption}
 \RequirePackage{booktabs}
 \RequirePackage{longtable}
 \RequirePackage{array}
 \RequirePackage{enumitem}
-\RequirePackage{amsmath}
+\RequirePackage[fleqn]{amsmath}
+\RequirePackage{xurl}
 \RequirePackage{hyperref}
 \RequirePackage{xkeyval}
 
@@ -84,26 +85,32 @@
 
 \setstretch{1}
 \setlength{\parindent}{0.6cm}
-\setlength{\parskip}{0pt}
+\setlength{\parskip}{6pt}
+\AtBeginDocument{\setlength{\mathindent}{10\fontdimen2\font}}
 \clubpenalty=10000
 \widowpenalty=10000
 \displaywidowpenalty=10000
 \setlist{nosep}
-\captionsetup{font=normalsize,labelfont=bf,labelsep=space}
+\captionsetup{font={normalsize,bf},labelsep=space}
 \hypersetup{hidelinks,pdfauthor={\filkom@nama},pdftitle={\filkom@judul}}
 
 \titleformat{\chapter}[block]
   {\centering\bfseries\fontsize{16pt}{19pt}\selectfont}
   {BAB \thechapter}{0.75em}{\MakeUppercase}
-\titlespacing*{\chapter}{0pt}{0pt}{20pt}
+\titlespacing*{\chapter}{0pt}{0pt}{18pt}
 \titleformat{name=\chapter,numberless}[block]
   {\centering\bfseries\fontsize{16pt}{19pt}\selectfont}
   {}{0pt}{\MakeUppercase}
 \titleformat{\section}{\bfseries\fontsize{14pt}{17pt}\selectfont}{\thesection}{0.75em}{}
 \titleformat{\subsection}{\bfseries\fontsize{14pt}{17pt}\selectfont}{\thesubsection}{0.75em}{}
-\titleformat{\subsubsection}{\bfseries\fontsize{12pt}{14pt}\selectfont}{\thesubsubsection}{0.75em}{}
+\titleformat{\subsubsection}{\bfseries\itshape\fontsize{12pt}{14pt}\selectfont}{\thesubsubsection}{0.75em}{}
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+\titlespacing*{\subsection}{0pt}{9pt}{6pt}
+\titlespacing*{\subsubsection}{0pt}{9pt}{6pt}
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{3}
+\renewcommand{\cftchappresnum}{BAB\space}
+\setlength{\cftchapnumwidth}{4.2em}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -115,9 +122,11 @@
   \hypersetup{pageanchor=false}%
   \begin{titlepage}
     \thispagestyle{empty}
+    \setlength{\parskip}{0pt}
     \centering
     {\bfseries\fontsize{16pt}{19pt}\selectfont\MakeUppercase{\filkom@judul}\par}
     \vspace{1.4cm}
+    {\fontsize{14pt}{17pt}\selectfont
     {\bfseries PROPOSAL SKRIPSI\par}
     \vspace{1.1cm}
     {Disusun oleh:\par}
@@ -134,15 +143,31 @@
     {\MakeUppercase{\filkom@universitas}\par}
     {\MakeUppercase{\filkom@kota}\par}
     {\filkom@tahun\par}
+    }
   \end{titlepage}
   \hypersetup{pageanchor=true}%
+}
+
+\addto\captionsindonesian{%
+  \renewcommand{\contentsname}{DAFTAR ISI}%
+  \renewcommand{\listtablename}{DAFTAR TABEL}%
+  \renewcommand{\listfigurename}{DAFTAR GAMBAR}%
 }
 
 \newcommand{\makeproposalfrontmatter}{%
   \pagenumbering{roman}
   \setcounter{page}{2}
+  \cleardoublepage
+  \phantomsection
+  \addcontentsline{toc}{chapter}{\contentsname}
   \tableofcontents\clearpage
+  \cleardoublepage
+  \phantomsection
+  \addcontentsline{toc}{chapter}{\listtablename}
   \listoftables\clearpage
+  \cleardoublepage
+  \phantomsection
+  \addcontentsline{toc}{chapter}{\listfigurename}
   \listoffigures\clearpage
   \chapter*{DAFTAR LAMPIRAN}
   \addcontentsline{toc}{chapter}{DAFTAR LAMPIRAN}
