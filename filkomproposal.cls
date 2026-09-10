@@ -30,6 +30,7 @@
 \RequirePackage[fleqn]{amsmath}
 \RequirePackage{xurl}
 \RequirePackage{hyperref}
+\urlstyle{same}
 \RequirePackage{xkeyval}
 
 \IfFontExistsTF{Calibri}{
