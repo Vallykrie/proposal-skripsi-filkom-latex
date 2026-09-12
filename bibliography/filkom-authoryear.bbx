@@ -1,10 +1,23 @@
 \ProvidesFile{filkom-authoryear.bbx}[2026/09/02 v0.1.0 FILKOM author-year bibliography]
+\DeclareLanguageMapping{indonesian}{indonesian}
 \RequireBibliographyStyle{ext-authoryear-comp}
 \ExecuteBibliographyOptions{giveninits=true,maxbibnames=99,sorting=nyt,doi=true,url=true}
 \DeclareNameAlias{sortname}{family-given}
 \renewcommand*{\bibinitdelim}{}
 \DeclareDelimFormat[bib]{nameyeardelim}{\addcomma\space}
+\DeclareDelimFormat{finalnamedelim}{\ifnumgreater{\value{liststop}}{2}{\addcomma}{}\addspace dan\space}
+\DeclareDelimFormat{multinamedelim}{\addcomma\space}
 \renewbibmacro*{date+extradate}{\printlabeldateextra}
 \DeclareFieldFormat{doi}{\url{https://doi.org/#1}}
-\DefineBibliographyStrings{english}{urlseen={Diakses},andothers={et\addabbrvspace al\adddot}}
+\DeclareFieldFormat[article,inproceedings,incollection]{title}{#1}
+\DeclareFieldFormat[article]{number}{\mkbibparens{#1}}
+\renewbibmacro*{in:}{\ifentrytype{article}{}{\printtext{\bibstring{in}\intitlepunct}}}
+\renewbibmacro*{volume+number+eid}{%
+  \setunit{\addcomma\space}\printfield{volume}%
+  \printfield{number}%
+  \setunit{\addcomma\space}\printfield{eid}}
+\DeclareFieldFormat{url}{\bibstring{url}\space\url{#1}}
+\DeclareFieldFormat{urldate}{\mkbibbrackets{\bibstring{urlseen}\space#1}}
+\DefineBibliographyStrings{english}{urlseen={Diakses},url={Tersedia di\addcolon},in={Dalam\addcolon},and={dan},andothers={et\addabbrvspace al\adddot},byeditor={Disunting oleh},editor={Penyunting},editors={Penyunting}}
+\DefineBibliographyStrings{indonesian}{urlseen={Diakses},url={Tersedia di\addcolon},in={Dalam\addcolon},and={dan},andothers={et\addabbrvspace al\adddot},byeditor={Disunting oleh},editor={Penyunting},editors={Penyunting}}
 \endinput
